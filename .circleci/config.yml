@@ -51,8 +51,6 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
-      - codecov/upload:
-          filters:
-            branches:
-              only:
-                - master # ou la branche de votre choix
+      - codecov/upload: # Utilisez le nom exact du job de l'orb Codecov
+          requires:
+            - build-and-test # Assurez-vous que ce job dépend du job de build
