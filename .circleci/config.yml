@@ -7,16 +7,16 @@ orbs:
 executors:
   maven-executor:
     docker:
-      - image: maven:3.8.4-openjdk-11  # Image Maven avec OpenJDK 11
+      - image: maven:3.8.4-openjdk-11
 
 jobs:
   build:
     executor: maven-executor
     steps:
-      - checkout  # Vérification du code source
+      - checkout
       - run:
           name: Build and Test with Coverage
-          command: mvn clean verify -DskipTests=false  # Exécuter les tests et générer le rapport de JaCoCo
+          command: mvn clean verify -DskipTests=false
       - run:
           name: Verify Coverage Report Exists
           command: |
@@ -26,18 +26,18 @@ jobs:
             fi
       - run:
           name: List Coverage Report Directory
-          command: ls -la target/site/jacoco  # Vérifiez que le fichier jacoco.xml est dans le dossier JaCoCo
+          command: ls -la target/site/jacoco
 
   codecov-upload:
     executor: maven-executor
     steps:
-      - checkout  # Nécessaire si l'upload n'est pas consécutif au build
+      - checkout
       - codecov/upload:
-          token: CODECOV_TOKEN  # Token Codecov défini dans les variables d'environnement CircleCI
-          file: "target/site/jacoco/jacoco.xml"  # Spécifiez le fichier de rapport JaCoCo
+          token: CODECOV_TOKEN
+          file: "target/site/jacoco/jacoco.xml"
 
 workflows:
-  version: 2  # Version de la configuration du workflow
+  version: 2
   build:
     jobs:
       - build
@@ -47,4 +47,4 @@ workflows:
           filters:
             branches:
               only:
-                - master  # Exécuter uniquement sur la branche masterr
+                - master

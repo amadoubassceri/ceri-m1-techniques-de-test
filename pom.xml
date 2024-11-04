@@ -50,6 +50,7 @@
                 <version>0.8.9</version> <!-- Utilisez la dernière version disponible -->
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
@@ -60,9 +61,14 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/site/jacoco</outputDirectory> <!-- Dossier de sortie pour les rapports -->
+
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
 
         <sourceDirectory>src/main/java</sourceDirectory>
