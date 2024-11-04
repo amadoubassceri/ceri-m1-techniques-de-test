@@ -2,6 +2,10 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
+# Import the Codecov orb
+orbs:
+  codecov: codecov/codecov@4.0.1
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
@@ -40,17 +44,15 @@ jobs:
           name: Generate Checkstyle Report
           command: mvn checkstyle:checkstyle
 
-      # Upload the coverage report to Codecov.
-      - run:
-          name: Upload to Codecov
-          command: bash <(curl -s https://codecov.io/bash)
-          environment:
-            CODECOV_TOKEN: $CODECOV_TOKEN  # Your token is added automatically here
-
-# Orchestrate jobs using workflows
+# Define workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
   sample: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
+      - codecov/upload:
+          filters:
+            branches:
+              only:
+                - master # ou la branche de votre choix
