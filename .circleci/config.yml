@@ -1,5 +1,5 @@
 version: 2.1
-
+#importation de codecov
 orbs:
   codecov: codecov/codecov@4.0.1
 
@@ -15,7 +15,7 @@ jobs:
       - checkout  # Vérifier le code source
       - run:
           name: Show Maven Test Output
-          command: mvn test -X  # Exécuter les tests avec le mode debug
+          command: mvn test -X  # Exécuter les tests avec le mode debugg
       - run:
           name: Generate Coverage Report
           command: mvn jacoco:report  # Générer le rapport de couverture de JaCoCo
@@ -31,7 +31,7 @@ jobs:
     steps:
       - codecov/upload:
           token: CODECOV_TOKEN  # Utiliser le token Codecov défini dans les variables d'environnement de CircleCI
-          slug: olfabre/ceri-m1-techniques-de-test  # Ajouter le slug du dépôt
+
 
 workflows:
   build:
@@ -43,4 +43,4 @@ workflows:
           filters:
             branches:
               only:
-                - master  # Exécuter uniquement sur la branche master
+                - master  # Exécuter uniquement sur la branche master.
