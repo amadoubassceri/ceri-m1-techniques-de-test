@@ -44,13 +44,14 @@ jobs:
           name: Generate Checkstyle Report
           command: mvn checkstyle:checkstyle
 
-# Define workflows
+      # Upload the coverage report to Codecov using the Codecov orb
+      - codecov/upload: # Utilisation de l'orb Codecov pour le téléchargement
+          file: ./target/site/jacoco/jacoco.xml # Spécifiez le chemin de votre rapport JaCoCo
+
+# Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
   sample: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
-      - codecov/upload: # Utilisez le nom exact du job de l'orb Codecov
-          requires:
-            - build-and-test # Assurez-vous que ce job dépend du job de build
