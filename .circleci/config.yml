@@ -2,6 +2,10 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
+# Import the Codecov orb
+orbs:
+  codecov: codecov/codecov@4.0.1
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
@@ -40,12 +44,9 @@ jobs:
           name: Generate Checkstyle Report
           command: mvn checkstyle:checkstyle
 
-      # Upload the coverage report to Codecov.
-      - run:
-          name: Upload to Codecov
-          command: bash <(curl -s https://codecov.io/bash)
-          environment:
-            CODECOV_TOKEN: $CODECOV_TOKEN  # Your token is added automatically here
+      # Upload the coverage report to Codecov using the Codecov orb
+      - codecov/upload: # Utilisation de l'orb Codecov pour le téléchargement
+          file: ./target/site/jacoco/jacoco.xml # Spécifiez le chemin de votre rapport JaCoCo
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
