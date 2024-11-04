@@ -33,7 +33,7 @@ jobs:
           name: Test
           command: mvn test
 
-      # Etape pour generer le rapport de couverture de code
+      # Etape pour generer le rapport de couverture de code.
       - run:
           name: Generate Coverage Report
           command: mvn jacoco:report
