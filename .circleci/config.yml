@@ -47,4 +47,4 @@ workflows:
           filters:
             branches:
               only:
-                - master  # Exécuter uniquement sur la branche master
+                - master  # Exécuter uniquement sur la branche masterr
