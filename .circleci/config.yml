@@ -1,39 +1,43 @@
-version: 2.1
-#importation de codecov
+version: 2.1  # Version de la configuration CircleCI
+
+# Importation de l'orb Codecov
 orbs:
   codecov: codecov/codecov@4.0.1
 
 executors:
   maven-executor:
     docker:
-      - image: maven:3.8.4-openjdk-11  # Utilisation d'une image avec Maven et OpenJDK 11
+      - image: maven:3.8.4-openjdk-11  # Image Maven avec OpenJDK 11
 
 jobs:
   build:
     executor: maven-executor
     steps:
-      - checkout  # Vérifier le code source
+      - checkout  # Vérification du code source
       - run:
-          name: Show Maven Test Output
-          command: mvn test -X  # Exécuter les tests avec le mode debugg
+          name: Build and Test with Coverage
+          command: mvn clean verify -DskipTests=false  # Exécuter les tests et générer le rapport de JaCoCo
       - run:
-          name: Generate Coverage Report
-          command: mvn jacoco:report  # Générer le rapport de couverture de JaCoCo
+          name: Verify Coverage Report Exists
+          command: |
+            if [ ! -f target/site/jacoco/jacoco.xml ]; then
+              echo "Error: JaCoCo coverage report not found!"
+              exit 1
+            fi
       - run:
           name: List Coverage Report Directory
-          command: ls -la target/site/jacoco  # Lister le contenu du dossier JaCoCo
-      - run:
-          name: List Surefire Reports
-          command: ls -la target/surefire-reports  # Lister les rapports de tests Surefire
+          command: ls -la target/site/jacoco  # Vérifiez que le fichier jacoco.xml est dans le dossier JaCoCo
 
   codecov-upload:
     executor: maven-executor
     steps:
+      - checkout  # Nécessaire si l'upload n'est pas consécutif au build
       - codecov/upload:
-          token: CODECOV_TOKEN  # Utiliser le token Codecov défini dans les variables d'environnement de CircleCI
-
+          token: CODECOV_TOKEN  # Token Codecov défini dans les variables d'environnement CircleCI
+          file: "target/site/jacoco/jacoco.xml"  # Spécifiez le fichier de rapport JaCoCo
 
 workflows:
+  version: 2  # Version de la configuration du workflow
   build:
     jobs:
       - build
@@ -43,4 +47,4 @@ workflows:
           filters:
             branches:
               only:
-                - master  # Exécuter uniquement sur la branche master.
+                - master  # Exécuter uniquement sur la branche master
