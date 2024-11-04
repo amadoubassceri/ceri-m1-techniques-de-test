@@ -2,6 +2,10 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
+# importation de l'orbe Codecov
+orbs:
+  codecov: codecov/codecov@4.0.1
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
@@ -29,6 +33,10 @@ jobs:
           name: Test
           command: mvn test
 
+      # Etape pour generer le rapport de couverture de code
+      - run:
+          name: Generate Coverage Report
+          command: mvn jacoco:report
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
@@ -36,3 +44,8 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
+      - codecov/upload:
+          requires:
+            - build-and-test
+          with:
+            file: "target/site/jacoco/jacoco.xml"
