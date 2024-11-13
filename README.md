@@ -42,5 +42,5 @@ Si vous ne spécifiez pas de tag, le dernier commit à la date-heure de la fin d
 **Prénom :** Amadou 
 **Groupe :** M1 ILSEN CLA G1
 
-[![CircleCI](https://undefined/status-badge/img/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master.svg?style=svg)](https://undefined/status-badge/redirect/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master)
 [![codecov](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test/graph/badge.svg?token=FT2TF0IYHM)](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test)
