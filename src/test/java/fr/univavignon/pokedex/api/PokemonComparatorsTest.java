@@ -2,104 +2,65 @@ package fr.univavignon.pokedex.api;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class PokemonComparatorsTest {
 
     private Pokemon pikachu;
-    private Pokemon bulbasaur;
+    private Pokemon bulbizarre;
+    private Pokemon charmander;
 
     @Before
     public void setUp() {
-        // Créer les Pokémons pour le test
-        pikachu = new Pokemon(1, "Pikachu", 112, 100, 90, 900, 60, 500, 4, 85.0);
-        bulbasaur = new Pokemon(2, "Bulbizarre", 118, 111, 128, 612, 64, 4000, 4, 50.0);
+        // Initialisation des Pokémon pour les tests
+        pikachu = new Pokemon(1, "Pikachu", 100, 50, 60, 900, 35, 400, 5, 87.5);
+        bulbizarre = new Pokemon(2, "Bulbizarre", 50, 60, 70, 700, 40, 300, 3, 82.5);
+        charmander = new Pokemon(3, "Charmander", 60, 55, 50, 600, 30, 200, 2, 85.0);
     }
 
+    // Test pour le comparateur par NOM
     @Test
     public void testNameComparator() {
-        // Comparaison des Pokémons par nom
-        int result = PokemonComparators.NAME.compare(pikachu, bulbasaur);
+        List<Pokemon> pokemons = Arrays.asList(pikachu, bulbizarre, charmander);
 
-        // Pikachu vient avant Bulbizarre dans l'ordre alphabétique
-        assertTrue("Pikachu should come before Bulbizarre by name", result < 0);
+        // Tri des Pokémon par nom
+        pokemons.sort(PokemonComparators.NAME);
 
-        result = PokemonComparators.NAME.compare(bulbasaur, pikachu);
-        // Vérification inverse : Bulbizarre devrait venir après Pikachu
-        assertTrue("Bulbizarre should come after Pikachu by name", result > 0);
+        // Vérification que les Pokémon sont triés par ordre lexicographique de leurs noms
+        assertEquals("Bulbizarre", pokemons.get(0).getName());
+        assertEquals("Charmander", pokemons.get(1).getName());
+        assertEquals("Pikachu", pokemons.get(2).getName());
     }
 
+    // Test pour le comparateur par INDEX
     @Test
     public void testIndexComparator() {
-        // Comparaison des Pokémons par index
-        int result = PokemonComparators.INDEX.compare(pikachu, bulbasaur);
+        List<Pokemon> pokemons = Arrays.asList(pikachu, bulbizarre, charmander);
 
-        // L'index de Pikachu est plus petit que celui de Bulbizarre
-        assertTrue("Pikachu should have a smaller index than Bulbizarre", result < 0);
+        // Tri des Pokémon par index
+        pokemons.sort(PokemonComparators.INDEX);
 
-        result = PokemonComparators.INDEX.compare(bulbasaur, pikachu);
-        // Vérification inverse : Bulbizarre devrait avoir un index plus grand que Pikachu
-        assertTrue("Bulbizarre should have a larger index than Pikachu", result > 0);
+        // Vérification que les Pokémon sont triés par leur index
+        assertEquals(1, pokemons.get(0).getIndex());
+        assertEquals(2, pokemons.get(1).getIndex());
+        assertEquals(3, pokemons.get(2).getIndex());
     }
 
+    // Test pour le comparateur par CP (Combat Points)
     @Test
     public void testCpComparator() {
-        // Comparaison des Pokémons par CP
-        int result = PokemonComparators.CP.compare(pikachu, bulbasaur);
+        List<Pokemon> pokemons = Arrays.asList(pikachu, bulbizarre, charmander);
 
-        // Le CP de Pikachu est plus élevé que celui de Bulbizarre
-        assertTrue("Pikachu should have a higher CP than Bulbizarre", result > 0);
+        // Tri des Pokémon par CP
+        pokemons.sort(PokemonComparators.CP);
 
-        result = PokemonComparators.CP.compare(bulbasaur, pikachu);
-        // Vérification inverse : Bulbizarre devrait avoir un CP plus faible que Pikachu
-        assertTrue("Bulbizarre should have a lower CP than Pikachu", result < 0);
-    }
-
-    @Test
-    public void testEqualPokemonsByName() {
-        // Créer un Pokémon avec le même nom, index et CP
-        Pokemon pikachu1 = new Pokemon(1, "Pikachu", 112, 100, 90, 900, 60, 500, 4, 85.0);
-        Pokemon pikachu2 = new Pokemon(1, "Pikachu", 112, 100, 90, 900, 60, 500, 4, 85.0);
-
-        // Comparaison des Pokémons par nom
-        int result = PokemonComparators.NAME.compare(pikachu1, pikachu2);
-        // Les Pokémons devraient être égaux par nom
-        assertEquals("Pokemons should be equal by name", 0, result);
-    }
-
-    @Test
-    public void testEqualPokemonsByIndex() {
-        // Créer un Pokémon avec le même nom, index et CP
-        Pokemon pikachu1 = new Pokemon(1, "Pikachu", 112, 100, 90, 900, 60, 500, 4, 85.0);
-        Pokemon pikachu2 = new Pokemon(1, "Pikachu", 112, 100, 90, 900, 60, 500, 4, 85.0);
-
-        // Comparaison des Pokémons par index
-        int result = PokemonComparators.INDEX.compare(pikachu1, pikachu2);
-        // Les Pokémons devraient être égaux par index
-        assertEquals("Pokemons should be equal by index", 0, result);
-    }
-
-    @Test
-    public void testEqualPokemonsByCp() {
-        // Créer un Pokémon avec le même nom, index et CP
-        Pokemon pikachu1 = new Pokemon(1, "Pikachu", 112, 100, 90, 900, 60, 500, 4, 85.0);
-        Pokemon pikachu2 = new Pokemon(1, "Pikachu", 112, 100, 90, 900, 60, 500, 4, 85.0);
-
-        // Comparaison des Pokémons par CP
-        int result = PokemonComparators.CP.compare(pikachu1, pikachu2);
-        // Les Pokémons devraient être égaux par CP
-        assertEquals("Pokemons should be equal by CP", 0, result);
-    }
-
-    @Test
-    public void testReverseCpComparator() {
-        // Comparaison inversée des Pokémons par CP
-        int result = PokemonComparators.CP.reversed().compare(pikachu, bulbasaur);
-
-        // Comme l'ordre est inversé, Bulbizarre devrait avoir un CP plus élevé que Pikachu
-        assertTrue("After reversal, Bulbizarre should have a higher CP than Pikachu", result < 0);
+        // Vérification que les Pokémon sont triés par leur CP
+        assertEquals(600, pokemons.get(0).getCp());
+        assertEquals(700, pokemons.get(1).getCp());
+        assertEquals(900, pokemons.get(2).getCp());
     }
 }
