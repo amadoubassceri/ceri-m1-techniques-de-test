@@ -17,14 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-        # Setup Java (version 1.8)
+      # Setup Java (version 1.8)
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: 'adoptopenjdk'
           java-version: '1.8'
 
-        # Cache Maven dependencies to speed up the build
+      # Cache Maven dependencies to speed up the build
       - name: Cache Maven dependencies
         uses: actions/cache@v2
         with:
@@ -33,33 +33,32 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-        # Build the project and skip tests (you can enable tests if needed)
+      # Build the project and skip tests (you can enable tests if needed)
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-        # Run Checkstyle verification (ensure that code style is followed)
+      # Run Checkstyle verification (ensure that code style is followed)
       - name: Run Checkstyle
         run: mvn checkstyle:check
 
-        # Generate Javadoc
+      # Generate Javadoc
       - name: Generate Javadoc
         run: mvn javadoc:javadoc
 
-        # Deploy the generated Javadoc to GitHub Pages
+      # Deploy the generated Javadoc to GitHub Pages
       - name: Deploy Javadoc to GitHub Pages
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/master' }}  # Vérifier la branche correcte (master dans votre cas)
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions Bot"
-          mv target/site/apidocs docs
+          mv target/site/apidocs docs  # Déplace la Javadoc générée dans le répertoire "docs"
           git add docs
           git commit -m "Automated Javadoc deployment [skip ci]"
-          git push origin main
+          git push origin master  # Pousser dans la branche master
 
-        # Upload the checkstyle result as a badge (Optional, depends on your needs)
+      # Upload the checkstyle result as a badge (Optional, depends on your needs)
       - name: Upload Checkstyle Badge
         uses: actions/upload-artifact@v2
         with:
           name: checkstyle-report
           path: target/checkstyle-result.xml
-
