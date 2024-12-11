@@ -25,6 +25,7 @@ public class Main {
                 50.0);
         pokedex.addPokemon(bulbasaur);
 
+        //
         // Afficher la taille du pokédex
         System.out.println("Taille du Pokédex : " + pokedex.size());
     }
