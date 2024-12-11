@@ -48,9 +48,10 @@ jobs:
       # Upload the coverage report to Codecov.
       - run:
           name: Upload to Codecov
-          command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN -s target/site/jacoco -r "amadoubassceri/ceri-m1-techniques-de-test"
+          command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN -B master -s target/site/jacoco -r "gh/amadoubassceri/ceri-m1-techniques-de-test"
           environment:
             CODECOV_TOKEN: $CODECOV_TOKEN
+
 
 
 # Orchestrate jobs using workflows
