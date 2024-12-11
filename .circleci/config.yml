@@ -51,9 +51,9 @@ jobs:
           name: Install GitHub Pages Deploy Dependencies
           command: |
             curl -sL https://deb.nodesource.com/setup_18.x | bash -  # Mise à jour vers Node.js 18.x
-            apt-get update
-            apt-get install -y nodejs
-            npm install -g gh-pages
+            sudo apt-get update
+            sudo apt-get install -y nodejs
+            sudo npm install -g gh-pages
 
       # Deploy the Javadoc to GitHub Pages
       - run:
