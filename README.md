@@ -44,3 +44,24 @@ Si vous ne spécifiez pas de tag, le dernier commit à la date-heure de la fin d
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master)
 [![codecov](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test/graph/badge.svg?token=FT2TF0IYHM)](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test)
+
+# CERI M1 Techniques de Test
+
+## Description
+
+Projet pour l'apprentissage des techniques de test d'API.
+
+## Badges
+
+- **CircleCI**: [![CircleCI](https://dl.circleci.com/status-badge/img/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master)
+- **Codecov**: [![codecov](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test/graph/badge.svg?token=FT2TF0IYHM)](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test)
+
+## Checkstyle Badge
+
+[![Checkstyle](https://img.shields.io/badge/Checkstyle-E%3A0%20W%3A0%20I%3A0-brightgreen.svg)](https://github.com/checkstyle/checkstyle)
+
+### Explication des badges
+
+- **CircleCI Badge** : Montre l'état actuel du pipeline de build sur CircleCI.
+- **Codecov Badge** : Affiche la couverture de code sur le projet à l'aide de Codecov.
+- **Checkstyle Badge** : Indique le nombre d'erreurs (E), d'avertissements (W) et d'informations (I) détectées par le plugin Checkstyle.
