@@ -1,22 +1,27 @@
 version: 2.1
 
+# Import the Codecov orb
+orbs:
+  codecov: codecov/codecov@4.0.1
+
 jobs:
   build-and-test:
     docker:
-      - image: cimg/openjdk:11.0
+      - image: cimg/openjdk:11.0  # Utilisation de l'image OpenJDK 11 pour le build
     steps:
-      - checkout
+      - checkout  # Étape de checkout du code
 
-      # Build your project and generate the Javadoc
+      # Build le projet et génère la Javadoc
       - run:
           name: Build and Package
           command: mvn -B -DskipTests clean package
 
+      # Génération de la Javadoc
       - run:
           name: Generate Javadoc
           command: mvn javadoc:javadoc
 
-      # Run tests and generate code coverage report
+      # Lancer les tests et générer le rapport de couverture
       - run:
           name: Test
           command: mvn test
@@ -25,50 +30,51 @@ jobs:
           name: Generate Code Coverage Report
           command: mvn jacoco:report
 
-      # Run Checkstyle Verification
+      # Vérification avec Checkstyle
       - run:
           name: Run Checkstyle Verification
           command: mvn checkstyle:check
 
-      # Generate Checkstyle HTML Report
+      # Générer le rapport HTML Checkstyle
       - run:
           name: Generate Checkstyle HTML Report
           command: mvn checkstyle:checkstyle
 
-      # Upload to Codecov
+      # Télécharger le rapport de couverture vers Codecov
       - run:
           name: Upload to Codecov
           command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
 
   deploy-gh-pages:
     docker:
-      - image: cimg/python:3.8  # This is to use Python for the GitHub Pages deployment
+      - image: cimg/python:3.8  # Utilisation de Python pour le déploiement sur GitHub Pages
     steps:
-      - checkout
+      - checkout  # Étape de checkout du code
 
-      # Install necessary dependencies for GitHub Pages deployment (git, gh-pages, etc.)
+      # Installer les dépendances nécessaires pour le déploiement sur GitHub Pages
       - run:
           name: Install GitHub Pages Deploy Dependencies
           command: |
-            curl -sL https://deb.nodesource.com/setup_18.x | bash -  # Mise à jour vers Node.js 18.x
             sudo apt-get update
+            sudo apt-get install -y curl git
+            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -  # Mise à jour vers Node.js 18.x
             sudo apt-get install -y nodejs
-            sudo npm install -g gh-pages
+            sudo npm install -g gh-pages  # Installer gh-pages
 
-      # Deploy the Javadoc to GitHub Pages
+      # Déployer la Javadoc sur GitHub Pages
       - run:
           name: Deploy Javadoc to GitHub Pages
           command: |
-            git config --global user.name "CircleCI"
-            git config --global user.email "circleci@example.com"
-            git remote set-url origin https://${GH_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git
-            gh-pages -d target/site/apidocs  # Deploy the Javadoc directory to GitHub Pages
+            git config --global user.name "CircleCI"  # Configuration utilisateur Git
+            git config --global user.email "circleci@example.com"  # Configuration email Git
+            git remote set-url origin https://${GH_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git  # Authentification via token
+            gh-pages -d target/site/apidocs  # Déployer le dossier de la Javadoc sur la branche gh-pages
 
 workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build-and-test
-      - deploy-gh-pages:
+      - build-and-test  # Job de test et de génération de la Javadoc
+      - deploy-gh-pages:  # Job de déploiement sur GitHub Pages
           requires:
-            - build-and-test
+            - build-and-test  # Dépendance du job build-and-test
