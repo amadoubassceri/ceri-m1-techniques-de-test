@@ -31,6 +31,7 @@
 
     <build>
         <plugins>
+            <!-- Plugin Maven Compiler pour compiler le code Java -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -41,6 +42,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Plugin JaCoCo pour la couverture de code -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -61,11 +63,11 @@
                 </executions>
             </plugin>
 
-            <!-- Plugin Checkstyle -->
+            <!-- Plugin Checkstyle pour vérifier la conformité du code -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.2.1</version> <!-- Utilisez une version plus récente -->
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <id>checkstyle</id>
@@ -82,7 +84,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin Badger -->
+            <!-- Plugin Badger pour générer des badges Checkstyle -->
             <plugin>
                 <groupId>com.github.bordertech.buildtools</groupId>
                 <artifactId>badger</artifactId>
@@ -108,7 +110,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.12.0</version>
+                <version>3.3.0</version> <!-- Version correcte -->
                 <executions>
                     <execution>
                         <goals>
@@ -122,7 +124,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.12.0.</version>
+                <version>2.1</version> <!-- Version correcte -->
                 <executions>
                     <execution>
                         <id>default-site</id>
