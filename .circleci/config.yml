@@ -21,6 +21,17 @@ jobs:
           name: Generate Javadoc
           command: mvn javadoc:javadoc
 
+      # Vérifier si la Javadoc a bien été générée
+      - run:
+          name: Check if Javadoc is generated
+          command: |
+            if [ -d "target/site/apidocs" ]; then
+              echo "Javadoc generated successfully!"
+            else
+              echo "Javadoc directory not found! Check build logs."
+              exit 1
+            fi
+
       # Lancer les tests et générer le rapport de couverture
       - run:
           name: Test
@@ -51,15 +62,14 @@ jobs:
     steps:
       - checkout  # Étape de checkout du code
 
-      # Installer les dépendances nécessaires pour le déploiement sur GitHub Pages
+      # Vérifier si le répertoire de la Javadoc existe
       - run:
-          name: Install GitHub Pages Deploy Dependencies
+          name: Check Javadoc Directory Before Deploy
           command: |
-            sudo apt-get update
-            sudo apt-get install -y curl git
-            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -  # Mise à jour vers Node.js 18.x
-            sudo apt-get install -y nodejs
-            sudo npm install -g gh-pages  # Installer gh-pages
+            if [ ! -d "target/site/apidocs" ]; then
+              echo "Error: target/site/apidocs does not exist. Skipping deployment."
+              exit 1
+            fi
 
       # Déployer la Javadoc sur GitHub Pages
       - run:
