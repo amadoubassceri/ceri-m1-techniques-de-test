@@ -15,6 +15,7 @@ public class PokedexExceptionTest {
         assertNotNull(exception);
         assertEquals(errorMessage, exception.getMessage());
     }
+    //
 
     @Test(expected = PokedexException.class)
     public void testThrowPokedexException() throws PokedexException {

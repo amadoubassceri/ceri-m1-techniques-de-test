@@ -19,5 +19,5 @@ package fr.univavignon.pokedex.api;
    public PokedexException(final String message) {
      super(message);
    }
-
+//
  }
