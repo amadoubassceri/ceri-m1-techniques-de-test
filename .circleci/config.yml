@@ -65,8 +65,8 @@ jobs:
       - run:
           name: Deploy Javadoc to GitHub Pages
           command: |
-            git config --global user.name "CircleCI"  # Configuration utilisateur Git
-            git config --global user.email "circleci@example.com"  # Configuration email Git
+            git config --global user.name "amadoubassceri"  # Configuration utilisateur Git
+            git config --global user.email "narutokonoya1@gmail.com"  # Configuration email Git
             git remote set-url origin https://${GH_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git  # Authentification via token
             gh-pages -d target/site/apidocs  # Déployer le dossier de la Javadoc sur la branche gh-pages
 
