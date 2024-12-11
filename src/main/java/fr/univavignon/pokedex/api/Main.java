@@ -13,7 +13,16 @@ public class Main {
         IPokedex pokedex = pokedexFactory.createPokedex(metadataProvider, pokemonFactory);
 
         // Ajouter un Pokémon au pokedex
-        Pokemon bulbasaur = new Pokemon(0, "Bulbizarre", 118, 111, 128, 612, 64, 4000, 4, 50.0);
+        Pokemon bulbasaur = new Pokemon(
+                0,
+                "Bulbizarre",
+                118, 111,
+                128,
+                612,
+                64,
+                4000,
+                4,
+                50.0);
         pokedex.addPokemon(bulbasaur);
 
         // Afficher la taille du pokédex

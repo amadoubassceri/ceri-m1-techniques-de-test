@@ -35,9 +35,14 @@ jobs:
           name: Generate Code Coverage Report
           command: mvn jacoco:report
 
-      # Add the Checkstyle report generation step
+      # Add Checkstyle verification
       - run:
-          name: Generate Checkstyle Report
+          name: Run Checkstyle Verification
+          command: mvn checkstyle:check
+
+      # Generate Checkstyle HTML report
+      - run:
+          name: Generate Checkstyle HTML Report
           command: mvn checkstyle:checkstyle
 
       # Upload the coverage report to Codecov.

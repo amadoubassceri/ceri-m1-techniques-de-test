@@ -60,6 +60,29 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Plugin Checkstyle -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.2.1</version> <!-- Utilisez une version plus récente -->
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <failOnViolation>true</failOnViolation>
+                    <outputFile>target/checkstyle-result.xml</outputFile>
+                    <outputFormat>xml</outputFormat>
+                </configuration>
+            </plugin>
+
         </plugins>
 
         <sourceDirectory>src/main/java</sourceDirectory>
