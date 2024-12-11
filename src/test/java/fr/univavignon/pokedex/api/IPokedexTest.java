@@ -61,4 +61,5 @@ public class IPokedexTest {
         assertNotNull(pokemon);
         assertEquals("Bulbizarre", pokemon.getName());
     }
+
 }
