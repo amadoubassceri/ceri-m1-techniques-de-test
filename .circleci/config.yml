@@ -1,90 +1,89 @@
+# Utilisation de la dernière version 2.1 du moteur de pipeline CircleCI
 version: 2.1
 
-# Import the Codecov orb
-orbs:
-  codecov: codecov/codecov@4.0.1
-
+# Définition des jobs pour construire, tester et déployer
 jobs:
+  # Job de build et de test existant
   build-and-test:
     docker:
-      - image: cimg/openjdk:11.0  # Utilisation de l'image OpenJDK 11 pour le build
+      - image: cimg/openjdk:11.0
     steps:
-      - checkout  # Étape de checkout du code
-
-      # Build le projet et génère la Javadoc
+      - checkout
       - run:
-          name: Build and Package
+          name: Construire
           command: mvn -B -DskipTests clean package
-
-      # Génération de la Javadoc
       - run:
-          name: Generate Javadoc
-          command: mvn javadoc:javadoc
-
-      # Vérifier si la Javadoc a bien été générée
-      - run:
-          name: Check if Javadoc is generated
-          command: |
-            if [ -d "target/site/apidocs" ]; then
-              echo "Javadoc generated successfully!"
-            else
-              echo "Javadoc directory not found! Check build logs."
-              exit 1
-            fi
-
-      # Lancer les tests et générer le rapport de couverture
-      - run:
-          name: Test
+          name: Tester
           command: mvn test
-
       - run:
-          name: Generate Code Coverage Report
+          name: Générer le rapport de couverture de code
           command: mvn jacoco:report
-
-      # Vérification avec Checkstyle
       - run:
-          name: Run Checkstyle Verification
+          name: Vérification Checkstyle
           command: mvn checkstyle:check
-
-      # Générer le rapport HTML Checkstyle
       - run:
-          name: Generate Checkstyle HTML Report
+          name: Générer le rapport HTML Checkstyle
           command: mvn checkstyle:checkstyle
-
-      # Télécharger le rapport de couverture vers Codecov
       - run:
-          name: Upload to Codecov
+          name: Envoyer à Codecov
           command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
 
-  deploy-gh-pages:
+  # Nouveau job pour déployer la Javadoc sur GitHub Pages
+  docs-deploy:
     docker:
-      - image: cimg/python:3.8  # Utilisation de Python pour le déploiement sur GitHub Pages
+      - image: cimg/openjdk:11.0
     steps:
-      - checkout  # Étape de checkout du code
+      - checkout
 
-      # Vérifier si le répertoire de la Javadoc existe
+      # Générer la Javadoc
       - run:
-          name: Check Javadoc Directory Before Deploy
+          name: Générer la Javadoc
           command: |
-            if [ ! -d "target/site/apidocs" ]; then
-              echo "Error: target/site/apidocs does not exist. Skipping deployment."
-              exit 1
-            fi
+            mvn javadoc:javadoc
 
-      # Déployer la Javadoc sur GitHub Pages
+      # Configurer Git
       - run:
-          name: Deploy Javadoc to GitHub Pages
+          name: Configurer Git
           command: |
-            git config --global user.name "amadoubassceri"  # Configuration utilisateur Git
-            git config --global user.email "narutokonoya1@gmail.com"  # Configuration email Git
-            git remote set-url origin https://${GH_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git  # Authentification via token
-            gh-pages -d target/site/apidocs  # Déployer le dossier de la Javadoc sur la branche gh-pages
+            git config --global user.email "narutokonoya1@gmail.com"
+            git config --global user.name "amadoubassceri"
 
+      # Cloner et mettre à jour la branche gh-pages
+      - run:
+          name: Déployer sur GitHub Pages
+          command: |
+            # Cloner le dépôt
+            git clone https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages
+            
+            # Naviguer dans le répertoire gh-pages
+            cd gh-pages
+            
+            # Basculer sur la branche gh-pages (la créer si elle n'existe pas)
+            git checkout gh-pages || git checkout -b gh-pages
+            
+            # Supprimer le contenu Javadoc existant
+            rm -rf *
+            
+            # Copier les nouveaux fichiers Javadoc
+            cp -r ../target/site/apidocs/* .
+            
+            # Ajouter, committer et pousser les modifications
+            git add -A
+            git commit -m "[skip ci] Mise à jour Javadoc" || echo "Aucune modification à commiter"
+            git push https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
+
+# Définir le workflow
 workflows:
   version: 2
-  build-and-deploy:
+  build-test-et-deployer:
     jobs:
-      - build-and-test  # Job de test et de génération de la Javadoc
-      - deploy-gh-pages:  # Job de déploiement sur GitHub Pages
+      - build-and-test:
+          filters:
+            branches:
+              only: master
+      - docs-deploy:
           requires:
-            - build-and-test  # Dépendance du job build-and-test
+            - build-and-test
+          filters:
+            branches:
+              only: master
