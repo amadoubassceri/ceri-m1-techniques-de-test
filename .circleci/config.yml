@@ -1,6 +1,6 @@
-version: 2.1  # Utilisation de la dernière version 2.1 du moteur de pipeline CircleCI
+version: 2.1
 
-jobs:  # Assurez-vous que 'jobs:' est correctement indenté
+jobs:
   build-and-test:
     docker:
       - image: cimg/openjdk:11.0
@@ -25,7 +25,7 @@ jobs:  # Assurez-vous que 'jobs:' est correctement indenté
           name: Envoyer à Codecov
           command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
 
-  docs-deploy:
+  deploy-gh-pages:
     docker:
       - image: cimg/openjdk:11.0
     steps:
@@ -52,13 +52,13 @@ jobs:  # Assurez-vous que 'jobs:' est correctement indenté
 
 workflows:
   version: 2
-  build-test-et-deployer:
+  build-and-deploy:
     jobs:
       - build-and-test:
           filters:
             branches:
               only: master
-      - docs-deploy:
+      - deploy-gh-pages:
           requires:
             - build-and-test
           filters:
