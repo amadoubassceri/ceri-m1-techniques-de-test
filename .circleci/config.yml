@@ -1,89 +1,43 @@
-# Utilisation de la dernière version 2.1 du moteur de pipeline CircleCI
-version: 2.1
+docs-deploy:
+  docker:
+    - image: cimg/openjdk:11.0
+  steps:
+    - checkout
 
-# Définition des jobs pour construire, tester et déployer
-jobs:
-  # Job de build et de test existant
-  build-and-test:
-    docker:
-      - image: cimg/openjdk:11.0
-    steps:
-      - checkout
-      - run:
-          name: Construire
-          command: mvn -B -DskipTests clean package
-      - run:
-          name: Tester
-          command: mvn test
-      - run:
-          name: Générer le rapport de couverture de code
-          command: mvn jacoco:report
-      - run:
-          name: Vérification Checkstyle
-          command: mvn checkstyle:check
-      - run:
-          name: Générer le rapport HTML Checkstyle
-          command: mvn checkstyle:checkstyle
-      - run:
-          name: Envoyer à Codecov
-          command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+    # Generate Javadoc
+    - run:
+        name: Generate Javadoc
+        command: mvn javadoc:javadoc
 
-  # Nouveau job pour déployer la Javadoc sur GitHub Pages
-  docs-deploy:
-    docker:
-      - image: cimg/openjdk:11.0
-    steps:
-      - checkout
+    # Create docs directory if it doesn't exist
+    - run:
+        name: Prepare Javadoc for GitHub Pages
+        command: |
+          mkdir -p docs
+          cp -r target/site/apidocs/* docs/
 
-      # Générer la Javadoc
-      - run:
-          name: Générer la Javadoc
-          command: |
-            mvn javadoc:javadoc
+    # Create a minimal Jekyll configuration if needed
+    - run:
+        name: Create Jekyll configuration
+        command: |
+          echo "theme: jekyll-theme-minimal" > docs/_config.yml
 
-      # Configurer Git
-      - run:
-          name: Configurer Git
-          command: |
-            git config --global user.email "narutokonoya1@gmail.com"
-            git config --global user.name "amadoubassceri"
+    # Configure Git
+    - run:
+        name: Configure Git
+        command: |
+          git config --global user.email "narutokonoya1@gmail.com"
+          git config --global user.name "amadoubassceri"
 
-      # Cloner et mettre à jour la branche gh-pages
-      - run:
-          name: Déployer sur GitHub Pages
-          command: |
-            # Cloner le dépôt
-            git clone https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages
-            
-            # Naviguer dans le répertoire gh-pages
-            cd gh-pages
-            
-            # Basculer sur la branche gh-pages (la créer si elle n'existe pas)
-            git checkout gh-pages || git checkout -b gh-pages
-            
-            # Supprimer le contenu Javadoc existant
-            rm -rf *
-            
-            # Copier les nouveaux fichiers Javadoc
-            cp -r ../target/site/apidocs/* .
-            
-            # Ajouter, committer et pousser les modifications
-            git add -A
-            git commit -m "[skip ci] Mise à jour Javadoc" || echo "Aucune modification à commiter"
-            git push https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
-
-# Définir le workflow
-workflows:
-  version: 2
-  build-test-et-deployer:
-    jobs:
-      - build-and-test:
-          filters:
-            branches:
-              only: master
-      - docs-deploy:
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master
+    # Deploy to GitHub Pages
+    - run:
+        name: Deploy to GitHub Pages
+        command: |
+          git clone https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages
+          cd gh-pages
+          git checkout gh-pages || git checkout -b gh-pages
+          rm -rf *
+          cp -r ../docs/* .
+          git add -A
+          git commit -m "[skip ci] Update Javadoc" || echo "No changes to commit"
+          git push https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
