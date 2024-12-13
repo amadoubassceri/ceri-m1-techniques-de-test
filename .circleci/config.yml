@@ -16,7 +16,7 @@ jobs:
           name: Générer le rapport de couverture de code
           command: mvn jacoco:report
       - run:
-          name: Vérification avec Checkstyle
+          name: Vérification Checkstyle
           command: mvn checkstyle:check
       - run:
           name: Générer le rapport HTML Checkstyle
@@ -37,25 +37,23 @@ jobs:
             git config --global user.email "narutokonoya1@gmail.com"
             git config --global user.name "amadoubassceri"
       - run:
-          name: Déployer sur GitHub Pages
+          name: Déployer la Javadoc sur GitHub Pages
           command: |
-            # Cloner le dépôt dans le répertoire `gh-pages`
-            git clone https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages
+            # Cloner la branche gh-pages (ou créer la branche si elle n'existe pas)
+            git clone --branch gh-pages https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages || git clone https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages -b main
+            
             cd gh-pages
-            # Vérifier si la branche `gh-pages` existe et se positionner dessus
             git checkout gh-pages || git checkout -b gh-pages
-            # Supprimer les anciens fichiers dans `gh-pages` pour ne garder que ceux de Javadoc
+            # Supprimer les fichiers existants dans la branche gh-pages
             rm -rf *
-            # Copier la documentation Javadoc générée dans `gh-pages`
+            # Copier tous les fichiers générés dans target/site/apidocs
             cp -r ../target/site/apidocs/* .
-            # Ajouter tous les fichiers modifiés
+            # Ajouter, commiter et pousser les fichiers vers GitHub Pages
             git add -A
-            # Vérifier s'il y a des modifications à committer
             if git diff-index --quiet HEAD; then
               echo "Aucune modification à commiter"
             else
               git commit -m "Mise à jour Javadoc"
-              # Pousser les modifications sur la branche `gh-pages`
               git push https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
             fi
 
@@ -66,12 +64,10 @@ workflows:
       - build-and-test:
           filters:
             branches:
-              only:
-                - master
+              only: master
       - deploy-gh-pages:
           requires:
             - build-and-test
           filters:
             branches:
-              only:
-                - master
+              only: master
