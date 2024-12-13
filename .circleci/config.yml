@@ -4,6 +4,7 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@4.0.1
 
+# Define a job to be invoked later in a workflow.
 jobs:
   build-and-test:
     docker:
@@ -57,32 +58,33 @@ jobs:
       - run:
           name: Install and configure gh-pages
           command: |
-            # Configure git for deployment
-            git config --global user.email "narutokonoya1@gmail.com"
+            # Configurer git pour le déploiement
+            git config --global user.email "amadoubassceri@gmail.com"
             git config --global user.name "amadoubassceri"
 
-            # Clone the repository and switch to gh-pages branch
-            git clone https://$TOKEN_JAVADOC@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages
+            # Cloner le dépôt et basculer sur la branche gh-pages
+            git clone https://$GH_TOKEN_GITHUB@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages
             cd gh-pages
 
-            # Checkout gh-pages branch or create it if it doesn't exist
+            # Basculer sur la branche gh-pages ou la créer si elle n'existe pas
             git checkout gh-pages || git checkout -b gh-pages
 
-            # Pull latest changes from the gh-pages branch
+            # Récupérer les derniers changements de la branche gh-pages
             git pull origin gh-pages --rebase || echo "No remote changes to pull"
 
-            # Copy all Javadoc files into the root of the gh-pages branch
+            # Copier tous les fichiers Javadoc dans la racine de la branche gh-pages
             cp -r ../target/site/apidocs/* ./
 
-            # Add, commit, and push changes to GitHub Pages
+            # Ajouter, committer et pousser les changements vers GitHub Pages
             git add -A
             git commit -m "[skip ci] Updated Javadoc" || echo "No changes to commit"
-            git push https://$TOKEN_JAVADOC@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
+            git push https://$GH_TOKEN_GITHUB@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
 
-# Define workflows to manage job execution
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
   version: 2
-  sample-workflow:
+  deploy-workflow: # This is the name of the workflow, feel free to change it to better match your workflow.
     jobs:
       - build-and-test:
           filters:
