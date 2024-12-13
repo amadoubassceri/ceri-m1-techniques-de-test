@@ -43,7 +43,8 @@ jobs:
             cd gh-pages
             git checkout gh-pages || git checkout -b gh-pages
             rm -rf *
-            cp -r ../target/site/apidocs/* .
+            mkdir docs
+            cp -r ../target/site/apidocs/* ./docs
             git add -A
             if git diff-index --quiet HEAD; then
               echo "Aucune modification à commiter"
