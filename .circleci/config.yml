@@ -7,16 +7,16 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Construire
+          name: Construire le projet
           command: mvn -B -DskipTests clean package
       - run:
-          name: Tester
+          name: Lancer les tests
           command: mvn test
       - run:
           name: Générer le rapport de couverture de code
           command: mvn jacoco:report
       - run:
-          name: Vérification Checkstyle
+          name: Vérification avec Checkstyle
           command: mvn checkstyle:check
       - run:
           name: Générer le rapport HTML Checkstyle
@@ -39,19 +39,25 @@ jobs:
       - run:
           name: Déployer sur GitHub Pages
           command: |
+            # Cloner le dépôt dans le répertoire `gh-pages`
             git clone https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages
             cd gh-pages
+            # Vérifier si la branche `gh-pages` existe et se positionner dessus
             git checkout gh-pages || git checkout -b gh-pages
+            # Supprimer les anciens fichiers dans `gh-pages` pour ne garder que ceux de Javadoc
             rm -rf *
+            # Copier la documentation Javadoc générée dans `gh-pages`
             cp -r ../target/site/apidocs/* .
+            # Ajouter tous les fichiers modifiés
             git add -A
+            # Vérifier s'il y a des modifications à committer
             if git diff-index --quiet HEAD; then
               echo "Aucune modification à commiter"
             else
               git commit -m "Mise à jour Javadoc"
+              # Pousser les modifications sur la branche `gh-pages`
               git push https://${GH_TOKEN_GITHUB}@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
             fi
-
 
 workflows:
   version: 2
@@ -60,10 +66,12 @@ workflows:
       - build-and-test:
           filters:
             branches:
-              only: master
+              only:
+                - master
       - deploy-gh-pages:
           requires:
             - build-and-test
           filters:
             branches:
-              only: master
+              only:
+                - master
