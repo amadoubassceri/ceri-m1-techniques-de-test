@@ -77,14 +77,13 @@ jobs:
 
             # Ajouter, committer et pousser les changements vers GitHub Pages
             git add -A
-            git commit -m "[skip ci] Updated Javadoc" || echo "No changes to commit"
+            git commit -m "Updated Javadoc" || echo "No changes to commit"
             git push https://$GH_TOKEN_GITHUB@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
 
 # Orchestrate jobs using workflows
-# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
   version: 2
-  deploy-workflow: # This is the name of the workflow, feel free to change it to better match your workflow.
+  deploy-workflow:
     jobs:
       - build-and-test:
           filters:
