@@ -13,7 +13,7 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
-      # Build the project
+      # Build the project (mvn will run from the directory containing pom.xml)
       - run:
           name: Build
           command: mvn -B -DskipTests clean package
@@ -77,7 +77,7 @@ jobs:
 
             # Ajouter, committer et pousser les changements vers GitHub Pages
             git add -A
-            git commit -m "Updated Javadoc" || echo "No changes to commit"
+            git commit -m "[skip ci] Updated Javadoc" || echo "No changes to commit"
             git push https://$GH_TOKEN_GITHUB@github.com/amadoubassceri/ceri-m1-techniques-de-test.git gh-pages --force
 
 # Orchestrate jobs using workflows
