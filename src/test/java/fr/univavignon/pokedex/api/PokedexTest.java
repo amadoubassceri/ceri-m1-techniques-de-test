@@ -55,6 +55,17 @@ public class PokedexTest {
         assertEquals("Bulbizarre", pokemon.getName());
     }
 
+    @Test
+    public void testGetPokemonWithValidId() throws PokedexException {
+        Pokemon bulbizarre = new Pokemon(0, "Bulbizarre", 126, 126, 90, 613, 64, 4000, 4, 56);
+        pokedex.addPokemon(bulbizarre);
+
+        // Tester un ID valide
+        Pokemon pokemon = pokedex.getPokemon(0);
+        assertNotNull(pokemon);
+        assertEquals("Bulbizarre", pokemon.getName());
+    }
+
     @Test(expected = PokedexException.class)
     public void testGetPokemonInvalidId() throws PokedexException {
         // Tester un ID invalide qui doit lancer une exception
@@ -134,5 +145,20 @@ public class PokedexTest {
 
         // Appeler getPokemonMetadata, ce qui doit lancer l'exception
         pokedex.getPokemonMetadata(0);
+    }
+
+    @Test
+    public void testCreatePokemon() {
+        // Simuler la création d'un Pokémon
+        Pokemon expectedPokemon = new Pokemon(0, "Bulbizarre", 126, 126, 90, 613, 64, 4000, 4, 56);
+        when(pokemonFactory.createPokemon(0, 613, 64, 4000, 4)).thenReturn(expectedPokemon);
+
+        // Tester la création d'un Pokémon
+        Pokemon createdPokemon = pokedex.createPokemon(0, 613, 64, 4000, 4);
+
+        // Vérifier que le Pokémon créé est correct
+        assertNotNull(createdPokemon);
+        assertEquals("Bulbizarre", createdPokemon.getName());
+        assertEquals(0, createdPokemon.getIndex());
     }
 }

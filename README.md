@@ -65,3 +65,24 @@ Projet pour l'apprentissage des techniques de test d'API.
 - **CircleCI Badge** : Montre l'état actuel du pipeline de build sur CircleCI.
 - **Codecov Badge** : Affiche la couverture de code sur le projet à l'aide de Codecov.
 - **Checkstyle Badge** : Indique le nombre d'erreurs (E), d'avertissements (W) et d'informations (I) détectées par le plugin Checkstyle.
+
+## Intégration de l'implémentation de la Team Rocket
+
+Nous avons intégré l'implémentation de la Team Rocket pour l'interface `IPokemonFactory` et l'avons testée avec notre suite de tests. Voici les principales étapes :
+
+1. **Ajout de l'implémentation** : Copiez l'implémentation de `RocketPokemonFactory` fournie par la Team Rocket dans le répertoire `src/main/java` de votre projet.
+
+2. **Exécution des tests** : Les tests existants couvrent déjà une grande partie des fonctionnalités. Pour exécuter les tests :
+
+    ```bash
+    mvn test
+    ```
+      ```bash
+    mvn checkstyle
+    ```
+
+3. **Ajout de nouveaux tests** : Des tests ont été ajoutés pour vérifier les comportements non couverts, tels que la gestion des index négatifs et des erreurs de génération des statistiques aléatoires.
+
+4. **Rapport de revue de code** : Un rapport a été rédigé pour signaler les défauts et proposer des améliorations, notamment concernant l'optimisation de la génération des statistiques et l'ajout de tests supplémentaires pour les cas d'erreurs non couverts.
+
+L'implémentation a été intégrée et testée, avec des recommandations pour améliorer la performance et la gestion des exceptions.
