@@ -72,6 +72,12 @@ public class PokedexTest {
         pokedex.getPokemon(999);
     }
 
+    @Test(expected = PokedexException.class)
+    public void testGetPokemonWithNegativeId() throws PokedexException {
+        // Tester un ID négatif qui doit lancer une exception
+        pokedex.getPokemon(-1);
+    }
+
     @Test
     public void testGetPokemons() {
         Pokemon bulbizarre = new Pokemon(0, "Bulbizarre", 126, 126, 90, 613, 64, 4000, 4, 56);
