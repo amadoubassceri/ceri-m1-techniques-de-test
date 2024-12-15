@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class PokemonFactoryTest {
 
@@ -53,5 +52,43 @@ public class PokemonFactoryTest {
         assertEquals(202, pokemon.getHp());
         assertEquals(5000, pokemon.getDust());
         assertEquals(4, pokemon.getCandy());
+    }
+
+    @Test
+    public void testCreatePokemonWithUnknownIndex() {
+        // Créer un Pokémon avec un index inconnu
+        Pokemon pokemon = pokemonFactory.createPokemon(999, 1000, 100, 3000, 5);
+
+        // Vérifier que le nom du Pokémon est "Unknown" pour un index non défini
+        assertNotNull(pokemon);
+        assertEquals(999, pokemon.getIndex());
+        assertEquals("Unknown", pokemon.getName());
+        assertEquals(1000, pokemon.getCp());
+        assertEquals(100, pokemon.getHp());
+        assertEquals(3000, pokemon.getDust());
+        assertEquals(5, pokemon.getCandy());
+    }
+
+    @Test
+    public void testCreatePokemonWithExtremeStats() {
+        // Créer un Pokémon avec des stats extrêmes pour tester le calcul de l'IV
+        Pokemon pokemon = pokemonFactory.createPokemon(0, Integer.MAX_VALUE, Integer.MAX_VALUE, 5000, 10);
+
+        // Vérifier que le calcul des IVs est correct même avec des valeurs extrêmes
+        double expectedIv = (Integer.MAX_VALUE + Integer.MAX_VALUE) / 2.0;
+        assertEquals(expectedIv, pokemon.getIv(), 0.001); // Vérifier avec une tolérance
+    }
+
+    @Test
+    public void testCreatePokemonWithNegativeStats() {
+        // Créer un Pokémon avec des stats négatives (cas invalide mais à tester)
+        Pokemon pokemon = pokemonFactory.createPokemon(0, -100, -50, 1000, 2);
+
+        // Vérifier les valeurs des stats (les stats devraient être négatives mais les autres propriétés doivent être valides)
+        assertNotNull(pokemon);
+        assertEquals(-100, pokemon.getCp());
+        assertEquals(-50, pokemon.getHp());
+        assertEquals(1000, pokemon.getDust());
+        assertEquals(2, pokemon.getCandy());
     }
 }
