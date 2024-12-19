@@ -6,18 +6,14 @@ import java.util.Random;
 
 import org.apache.commons.collections4.map.UnmodifiableMap;
 
-/**
- * La fabrique de Pokémon Rocket permet de créer des Pokémon
- * avec des statistiques générées de manière aléatoire.
- */
+
+
 public class RocketPokemonFactory implements IPokemonFactory {
 
     /**
-     * Map associant un index à un nom de Pokémon.
-     * Ce mapping est utilisé pour donner un nom au Pokémon basé sur son index.
+     *
      */
     private static Map<Integer, String> index2name;
-
     static {
         Map<Integer, String> aMap = new HashMap<Integer, String>();
         aMap.put(-1, "Ash's Pikachu");
@@ -29,7 +25,8 @@ public class RocketPokemonFactory implements IPokemonFactory {
 
     private static int generateRandomStat() {
         int total = 0;
-        for (int i = 0; i < 1000000; i++) {
+        for(int i=0; i < 1000000; i++)
+        {
             Random rn = new Random();
             int r = rn.nextInt(2);
             total = total + r;
@@ -40,7 +37,7 @@ public class RocketPokemonFactory implements IPokemonFactory {
     @Override
     public Pokemon createPokemon(int index, int cp, int hp, int dust, int candy) {
         String name;
-        if (!index2name.containsKey(index)) {
+        if(!index2name.containsKey(index)) {
             name = index2name.get(0);
         } else {
             name = index2name.get(index);
@@ -49,7 +46,7 @@ public class RocketPokemonFactory implements IPokemonFactory {
         int defense;
         int stamina;
         double iv;
-        if (index < 0) {
+        if(index < 0) {
             attack = 1000;
             defense = 1000;
             stamina = 1000;
@@ -62,4 +59,5 @@ public class RocketPokemonFactory implements IPokemonFactory {
         }
         return new Pokemon(index, name, attack, defense, stamina, cp, hp, dust, candy, iv);
     }
+
 }

@@ -51,6 +51,41 @@ Si vous ne spécifiez pas de tag, le dernier commit à la date-heure de la fin d
 
 Projet pour l'apprentissage des techniques de test d'API.
 
+# TP1 : Fork them all !
+### Épisode 1 - Récupération de l'API
+j'ai forke le projet puis je l'ai clone avec : 
+git clone https://github.com/amadoubassceri/ceri-m1-techniques-de-test.git
+Le projet ne contient qu’un package Java fr.univavignon.pokedex.api, sous le répertoire src/main.
+Et ce package contient l'Api.
+### Épisode 2 - Création du projet Maven
+Creation du projet maven avec un fichier nommé pom.xml et d’y décrire les cycles de vie de notre application.
+###Épisode 3 - Synchronisation avec Git
+Nous avons maintenant un projet opérationnel pour travailler, il faut maintenant commitet push les changements sur GitHub
+
+# TP2 : (Dés)intégration continue
+### Épisode 1 - CircleCI
+J'ai utilise la plateforme CircleCi pour mettre en place une integration continue comme vu en cours.
+J'ai utilise mon compte Github.
+### Épisode 2 - circle.yml
+CircleCI s’enregistre comme listener des événements de mon repository. Ainsi lorsque qu’on push un commit, CircleCI déclenche une intégration continue exécutée dans un conteneur.
+La première étape de cette intégration continue est de chercher un fichier nommé circle.yml à la racine de mon repository, si ce fichier n’est pas trouvé l’intégration continue échouera.
+
+# TP3 : Pokéunit
+Les test unitaires.
+
+# TP4 100% IV
+
+Code Coverage et l'implementation du code
+
+# TP5 checkstyles
+
+# Les outils utilises :
+Jacoco
+CircleCi
+CodeCov
+Maven
+CheckStyle
+
 ## Badges
 
 - **CircleCI**: [![CircleCI](https://dl.circleci.com/status-badge/img/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master)
@@ -86,3 +121,14 @@ Nous avons intégré l'implémentation de la Team Rocket pour l'interface `IPoke
 4. **Rapport de revue de code** : Un rapport a été rédigé pour signaler les défauts et proposer des améliorations, notamment concernant l'optimisation de la génération des statistiques et l'ajout de tests supplémentaires pour les cas d'erreurs non couverts.
 
 L'implémentation a été intégrée et testée, avec des recommandations pour améliorer la performance et la gestion des exceptions.
+
+# TP6
+## Revue de code TeamRocket
+
+Le code de la Team Rocket est vraiment pourrie.
+
+- J'ai testé leurs codes et ces derniers ne passent pas du tout.
+- Checkstyle a trouvé des erreurs. 
+- Aucune exception levée si l'index est en dehors de [0,150]
+- Les cp ne sont pas cohérents (pas bien géré à la création du pokemon)
+- Pas de documentation javadocs
