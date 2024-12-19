@@ -90,6 +90,8 @@ CheckStyle
 
 - **CircleCI**: [![CircleCI](https://dl.circleci.com/status-badge/img/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/amadoubassceri/ceri-m1-techniques-de-test/tree/master)
 - **Codecov**: [![codecov](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test/graph/badge.svg?token=FT2TF0IYHM)](https://codecov.io/gh/amadoubassceri/ceri-m1-techniques-de-test)
+- [![Javadoc](https://img.shields.io/badge/Javadoc-Link-green)](https://amadoubassceri.github.io/ceri-m1-techniques-de-test/)
+
 
 ## Checkstyle Badge
 
